@@ -1,0 +1,9 @@
+target/
+out/demo/js/
+node_modules/
+.shadow-cljs
+.idea/
+.nrepl-port
+*.iml
+pom.xml
+

@@ -1,0 +1,26 @@
+;; shadow-cljs configuration
+{:source-paths
+ ["src/dev"
+  "src/main"
+  "src/test"]
+
+ :dependencies
+ []
+
+ :dev-http
+ {7060 "out/demo"}
+
+ :builds
+ {:demo
+  {:target :browser
+   :output-dir "out/demo/js"
+   :module-loader true
+   :modules
+   {:app
+    {:init-fn demo.app/init}
+    :foo
+    {:entries [demo.foo]
+     :depends-on #{:app}}
+    :bar
+    {:entries [demo.bar]
+     :depends-on #{:app}}}}}}

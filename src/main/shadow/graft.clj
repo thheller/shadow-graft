@@ -1,0 +1,74 @@
+(ns shadow.graft
+  (:require
+    [clojure.java.io :as io]
+    [clojure.edn :as edn])
+  (:import
+    [java.util Base64]))
+
+
+(def valid-refs #{:none :self :parent :next-sibling :prev-sibling})
+
+(declare service?)
+
+(defn add
+  ([svc id]
+   (add svc id :none {}))
+  ([svc id stock-ref]
+   (add svc id stock-ref {}))
+  ([{:keys [encoder manifest-ref] :as svc} id stock-ref opts]
+   {:pre [(service? svc)
+          (string? id)
+          (contains? valid-refs stock-ref)
+          (map? opts)]}
+
+   (str "<script type=\"shadow/graft\" data-id=\"" id "\" data-ref=\"" (name stock-ref) "\""
+        (when-let [mod-info (get-in @manifest-ref id)]
+          (str " data-module=\"" (:mod mod-info) "\""))
+        ">"
+        (when (seq opts)
+          ;; base64 for security so we can never run into situations where
+          ;; opts contains </script><script>bad.stuff()</script> and somehow XSS attack us.
+          ;; the client part should never eval what it gets so should be fine
+          (.encodeToString
+            (Base64/getEncoder)
+            (.getBytes (encoder opts) "utf-8")))
+        "</script>")))
+
+(defrecord Service [encoder manifest-ref]
+  clojure.lang.IFn
+  (invoke [this id]
+    (add this id))
+  (invoke [this id stock-ref]
+    (add this id stock-ref))
+  (invoke [this id stock-ref opts]
+    (add this id stock-ref opts)))
+
+(defn service? [x]
+  (instance? Service x))
+
+(comment
+  (add (start) "foo-toggle" :parent {:hello "world"})
+  )
+
+(defn set-manifest [{:keys [manifest-ref] :as svc} new-manifest]
+  (reset! manifest-ref new-manifest)
+  svc)
+
+(defn use-manifest-resource [svc path-to-manifest]
+  (set-manifest svc (edn/read-string (slurp (io/resource path-to-manifest)))))
+
+(defn start
+  "encoder is expected to be a single arity function to turn the opts datastructure used in add to a string
+   defaults to just pr-str but could be using transit if both the frontend and backend prefer it"
+  ([]
+   (start pr-str))
+  ([encoder]
+   ;; since there are various possible sources for this we just start empty
+   ;; and let secondary services (eg. shadow.graft.fs-watch) fill it
+   (->Service encoder (atom {}))))
+
+(comment
+  (-> (start pr-str)
+      (use-manifest-resource "public/js/graft.edn")))
+
+(defn stop [svc])
