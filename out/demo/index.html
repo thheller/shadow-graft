@@ -14,6 +14,28 @@
     <script type="shadow/graft" data-id="upper-case-on-click" data-module="foo" data-ref="parent"></script>
 </p>
 
+<h2>Example Toggle</h2>
+<style>
+    .hidden { display: none; }
+</style>
+<div>
+    <button data-opener>toggle open/close</button>
+    <div class="hidden" data-body>
+        <p>hello world, I started closed</p>
+    </div>
+</div>
+<script type="shadow/graft" data-id="toggle-section" data-ref="prev-sibling"></script>
+
+<div>
+    <button data-opener>toggle open/close</button>
+    <div data-body>
+        <p>hello world, I started open</p>
+    </div>
+</div>
+<script type="shadow/graft" data-id="toggle-section" data-ref="prev-sibling"></script>
+
+<script type="shadow/graft" data-id="log" data-ref="none"></script>
+
 <script src="/js/app.js" async></script>
 </body>
 </html>
