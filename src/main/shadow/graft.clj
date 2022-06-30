@@ -72,3 +72,11 @@
       (use-manifest-resource "public/js/graft.edn")))
 
 (defn stop [svc])
+
+;; CLJS macro. kinda bad this is in this namespace since the CLJS code is not otherwise
+;; involved in the code above. should be fine as long as this namespace doesn't get more complex
+
+(defmacro reloadable [& body]
+  (if (not= :release (:shadow.build/mode &env))
+    `(shadow.graft/reloadable* (fn [] ~@body))
+    `(do ~@body)))
