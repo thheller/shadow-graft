@@ -16,7 +16,7 @@ The concept is that the server generates the "root/stock" HTML tree and leaves m
 tree. The client-side can then implement "scions" which are meant to enhance/grow the actual DOM tree. Basically giving
 the server the ability to call client side functions.
 
-It provides a good starting point for any [PWA](https://web.dev/progressive-web-apps/), wether you use something like
+It provides a good starting point for any [PWA](https://web.dev/progressive-web-apps/), whether you use something like
 and [Island Architecture](https://jasonformat.com/islands-architecture/) or a full Single Page App.
 
 ## How to use
@@ -150,22 +150,21 @@ Instead, this now becomes
     ))
 
 (defmethod graft/scion "app"
-  [{:keys [init-data init-props] :as opts} root-el]
+  [{:keys [data props] :as opts} root-el]
   ;; runs once
-  (re-frame/dispatch-sync [::events/initialize-db init-data])
+  (re-frame/dispatch-sync [::events/initialize-db data])
 
   ;; runs on init and again for each hot-reload
   (graft/reloadable
     (re-frame/clear-subscription-cache!)
     (rdom/unmount-component-at-node root-el)
-    (rdom/render [views/main-panel init-props] root-el)))
+    (rdom/render [views/main-panel props] root-el)))
 
 (defn init []
   (graft/init reader/read-string))
 ```
 
-Looks somewhat similar, but we gained the ability to pass data into our `::events/initialize-db` event and can pass
-props to the root component.
+Looks somewhat similar, but we gained the ability to pass data into our `::events/initialize-db` event and can pass props to the root component.
 
 It also becomes much easier to add more scions in case you want to go for more
 of [Island Architecture](https://jasonformat.com/islands-architecture/) type setup and not purely a SPA.
@@ -217,7 +216,6 @@ On the server this all looks something like
          :props {:hello "world"}})]
      
      [:script {:type "text/javascript" :src "/js/main.js" :defer true}]]))
-
 ```
 
 I simplified the non-graft things a little for brevity. The point is that the server just generates some HTML and leaves some graft markers for later use.
