@@ -1,4 +1,4 @@
-(defproject com.thheller/shadow-graft "0.6.0"
+(defproject com.thheller/shadow-graft "0.7.0"
   :description "Bridging function calls from CLJ to CLJS via HTML"
   :url "https://github.com/thheller/shadow-graft"
 
