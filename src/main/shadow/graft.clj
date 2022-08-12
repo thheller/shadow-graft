@@ -22,7 +22,7 @@
           (map? opts)]}
 
    (str "<script type=\"shadow/graft\" data-id=\"" id "\" data-ref=\"" (name stock-ref) "\""
-        (when-let [mod-info (get-in @manifest-ref id)]
+        (when-let [mod-info (get @manifest-ref id)]
           (str " data-module=\"" (:mod mod-info) "\""))
         ">"
         (when (seq opts)
