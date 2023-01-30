@@ -1,5 +1,7 @@
 (ns shadow.graft
-  (:require-macros [shadow.graft]))
+  (:require-macros [shadow.graft])
+  (:require
+    [goog.string :as gstr]))
 
 (defmulti scion
   (fn [opts dom]
@@ -25,7 +27,7 @@
         opts
         (if-not (seq body)
           {}
-          (decoder (js/decodeURIComponent body)))
+          (decoder (gstr/unescapeEntities body)))
 
         data-ref
         (.getAttribute script "data-ref")
