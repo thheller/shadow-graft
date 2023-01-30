@@ -1,6 +1,5 @@
 (ns shadow.graft
-  (:require-macros [shadow.graft])
-  (:require [goog.crypt.base64 :as b64]))
+  (:require-macros [shadow.graft]))
 
 (defmulti scion
   (fn [opts dom]
@@ -26,7 +25,7 @@
         opts
         (if-not (seq body)
           {}
-          (decoder (b64/decodeString body)))
+          (decoder body))
 
         data-ref
         (.getAttribute script "data-ref")

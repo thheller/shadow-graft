@@ -3,7 +3,7 @@
     [clojure.java.io :as io]
     [clojure.edn :as edn])
   (:import
-    [java.util Base64]))
+    [com.google.common.html HtmlEscapers]))
 
 
 (def valid-refs #{:none :self :parent :next-sibling :prev-sibling})
@@ -26,12 +26,8 @@
           (str " data-module=\"" (:mod mod-info) "\""))
         ">"
         (when (seq opts)
-          ;; base64 for security so we can never run into situations where
-          ;; opts contains </script><script>bad.stuff()</script> and somehow XSS attack us.
-          ;; the client part should never eval what it gets so should be fine
-          (.encodeToString
-            (Base64/getEncoder)
-            (.getBytes (encoder opts) "utf-8")))
+          ;; escape html to prevent some XSS
+          (.escape (HtmlEscapers/htmlEscaper) (encoder opts)))
         "</script>")))
 
 (defrecord Service [encoder manifest-ref]
