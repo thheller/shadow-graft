@@ -25,7 +25,7 @@
         opts
         (if-not (seq body)
           {}
-          (decoder body))
+          (decoder (js/decodeURIComponent body)))
 
         data-ref
         (.getAttribute script "data-ref")
