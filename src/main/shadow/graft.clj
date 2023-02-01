@@ -2,8 +2,7 @@
   (:require
     [clojure.java.io :as io]
     [clojure.edn :as edn])
-  (:import
-    [com.google.common.html HtmlEscapers]))
+  (:import [org.apache.commons.text StringEscapeUtils]))
 
 
 (def valid-refs #{:none :self :parent :next-sibling :prev-sibling})
@@ -27,7 +26,7 @@
         ">"
         (when (seq opts)
           ;; escape html to prevent some XSS
-          (.escape (HtmlEscapers/htmlEscaper) (encoder opts)))
+          (StringEscapeUtils/escapeHtml4 (encoder opts)))
         "</script>")))
 
 (defrecord Service [encoder manifest-ref]

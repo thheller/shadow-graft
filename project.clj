@@ -1,4 +1,4 @@
-(defproject com.thheller/shadow-graft "0.8.2"
+(defproject com.thheller/shadow-graft "0.9.0"
   :description "Bridging function calls from CLJ to CLJS via HTML"
   :url "https://github.com/thheller/shadow-graft"
 
@@ -12,7 +12,8 @@
 
   :dependencies
   [[org.clojure/clojure "1.11.1" :scope "provided"]
-   [org.clojure/clojurescript "1.11.60" :scope "provided"]]
+   [org.clojure/clojurescript "1.11.60" :scope "provided"]
+   [org.apache.commons/commons-text "1.10.0"]]
 
   :source-paths
   ["src/dev"
