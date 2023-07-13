@@ -97,11 +97,11 @@ The graft on the server-side generates simple script tags, eg.
 
 ```html
 <script type="shadow/graft" data-id="just-log-data" data-ref="parent">
-optional-base64-encoded-text
+optional-encoded-text
 </script>
 ```
 
-They are not visible and are not further interpreted by browsers until our code looks for them. They just represent data. For extra security the data is encoded via Base64.
+They are not visible and are not further interpreted by browsers until our code looks for them. They just represent data, using the encoding you specified (e.g. `pr-str`).
 
 This is intentionally simple so that any server can generate this and still hand off data to the client this way. The default implementation assumes a CLJ server but that is by no means necessary. Anything that is capable of generating this kind of script tag is viable.
 
@@ -218,6 +218,6 @@ Note that the graft points are all traversed in the DOM (depth-first) order. The
 
 If you have been long around enough in web development you might remember something like `$(".some-element").doStuff()` jquery-style plugins. They are similar in nature, but also made suffered the hardcoded id/class problems and made it difficult to pass data as well. It also had the issue of often looking for stuff that wasn't even on the page, just because it was on 1 or 50, and it was easier to just have the script always look them than to modify the script for that one page.
 
-I have used a [similar method](https://code.thheller.com/blog/web/2014/12/20/better-javascript-html-integration.html) exclusivly for many many years. It was time to create a proper library for this, so I can throw away my old hacky functions and finally have a proper name for the technique.
+I have used a [similar method](https://code.thheller.com/blog/web/2014/12/20/better-javascript-html-integration.html) exclusively for many years. It was time to create a proper library for this, so I can throw away my old hacky functions and finally have a proper name for the technique.
 
 Also took the time to make this work with multiple `:modules` and generating the necessary info via a [shadow-cljs](https://github.com/thheller/shadow-cljs) build hook. Docs on that to follow.
